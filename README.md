@@ -67,14 +67,14 @@ Console will print:
 - A final comparison table and save it to RESULTS_CSV
 
 Example table (values are reproducible, based on heart_failure_clinical_records.csv):
-| 方案 | AUC | Accuracy | F1 |
-|------|-----|----------|-----|
-| Baseline(标准缩放+OHE) | 0.9003 | 0.8442 | 0.7387 |
-| Log1p(偏态数值) | 0.9052 | 0.8494 | 0.7476 |
-| 分箱(age/time) | 0.9269 | 0.8668 | 0.7731 |
-| 简单比率/差分 | 0.9079 | 0.8480 | 0.7462 |
-| 二阶数值交互(仅交互) | 0.9239 | 0.8682 | 0.7861 |
-| 组合弱特征(log+bin+ratio) | 0.9344 | 0.8778 | 0.7973 |
+| Method | AUC | Accuracy | F1 |
+|---|---|---|---|
+| Baseline(StandardScaler+OHE) | 0.9003 | 0.8442 | 0.7387 |
+| Log1p(Skewed Numerics) | 0.9052 | 0.8494 | 0.7476 |
+| Binning(age/time) | 0.9269 | 0.8668 | 0.7731 |
+| Simple Ratios/Differences | 0.9079 | 0.8480 | 0.7462 |
+| 2nd-order Numeric Interactions(Interaction-only) | 0.9239 | 0.8682 | 0.7861 |
+| Combined Weak Features(log+bin+ratio) | 0.9344 | 0.8778 | 0.7973 |
 | AutoFE(Featuretools DFS) | 0.9484 | 0.8916 | 0.8197 |
 
 ## How it works
@@ -109,7 +109,7 @@ def add_mean_centering(df: pd.DataFrame) -> pd.DataFrame:
 X_mc = add_mean_centering(X_base)
 num_mc = NUMERIC_FEATURES + [c for c in X_mc.columns if c.endswith('_centered')]
 cat_mc = CATEGORICAL_FEATURES
-results.append(evaluate_variant('均值中心化(age/time)', X_mc, y, num_mc, cat_mc, CV, LOGREG_BASE_PARAMS))
+results.append(evaluate_variant('Mean Centering(age/time)', X_mc, y, num_mc, cat_mc, CV, LOGREG_BASE_PARAMS))
 ````
 
 ## Tips and troubleshooting
@@ -131,3 +131,4 @@ results.append(evaluate_variant('均值中心化(age/time)', X_mc, y, num_mc, ca
 ## License
 
 - Provide a license if you plan to share; otherwise keep private for internal evaluation.
+

@@ -32,5 +32,5 @@ def evaluate_variant(name: str, X: pd.DataFrame, y: pd.Series,
     clf = make_logreg(logreg_params)
     pipe = make_pipeline(pre, clf)
     metrics = evaluate_cv(pipe, X, y, cv)
-    return {'方案': name, 'AUC': round(metrics['AUC'], 4),
+    return {'Scenario': name, 'AUC': round(metrics['AUC'], 4),
             'Accuracy': round(metrics['Accuracy'], 4), 'F1': round(metrics['F1'], 4)}

@@ -7,7 +7,7 @@ def load_data(path: str = DATA_PATH, show_info: bool = True) -> Tuple[pd.DataFra
     if show_info:
         print(data.head())
         print(data.info())
-        print(f"数据形状: {data.shape}")
+        print(f"Data shape: {data.shape}")
     y = data[TARGET_COL]
     X = data.drop(TARGET_COL, axis=1)
     return X, y, data

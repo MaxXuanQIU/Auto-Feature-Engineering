@@ -17,7 +17,7 @@ def available_transform_primitives() -> List[str]:
 def run_dfs(data: pd.DataFrame, categorical_features: list, target_col: str,
             max_depth: int = 1) -> Tuple[pd.DataFrame, pd.Series, list]:
     df = data.copy()
-    # 布尔化二元类别
+    # Convert categorical features to boolean
     df[categorical_features] = df[categorical_features].astype(bool)
 
     es = ft.EntitySet(id='heart_failure_data')
@@ -30,7 +30,7 @@ def run_dfs(data: pd.DataFrame, categorical_features: list, target_col: str,
 
     avail_trans = set(available_transform_primitives())
     trans_primitives = sorted(list(DESIRED_TRANS & avail_trans))
-    print("使用的 transform primitives:", trans_primitives)
+    print("Using transform primitives:", trans_primitives)
 
     features, feature_defs = ft.dfs(
         entityset=es,
@@ -42,16 +42,16 @@ def run_dfs(data: pd.DataFrame, categorical_features: list, target_col: str,
         verbose=True
     )
 
-    # 清理与对齐
+    # Clean and align
     features = features.replace([np.inf, -np.inf], np.nan)
     features = features.fillna(features.mean())
-    # 目标对齐
+    # Align target
     patients_df = es['patients']
     if ID_COL in patients_df.columns:
         y_auto = patients_df.set_index(ID_COL).loc[features.index, target_col]
     else:
         y_auto = patients_df.loc[features.index, target_col]
 
-    # 去除任何潜在的目标泄漏列
+    # Remove any potential target leakage columns
     X_auto = features.drop(columns=[target_col], errors='ignore')
     return X_auto, y_auto, feature_defs
